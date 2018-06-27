@@ -1,10 +1,5 @@
 #!groovy
 
-properties([
-  parameters([
-    string(name: 'message', defaultValue: 'Hello, world', description: 'Message to display')
-   ])
-])
 node {
   stage("Checkout") {
      checkout scm
