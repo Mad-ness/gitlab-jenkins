@@ -5,18 +5,20 @@ node {
      checkout scm
   }
 
-  stage("Stage1") {
-    echo "${message}"  //access to your parameter
-    sh "whoami"
-    sh "cat /etc/fstab"
+  stage("Verification") {
+    sh "cd ansible; ansible-playbook site.yml --syntax-check"
+  }
+
+  stage("TestBuild") {
+    sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --tags=install,uninstall"
   }
 
   stage("Approve") {
-    input "Do you accept changes?"
+    input "The instance is ready to be deployed. Continue?"
   }
 
   stage("Stage2") {
-    sh "true"
+    sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --tags=install"
   }
 
 }
