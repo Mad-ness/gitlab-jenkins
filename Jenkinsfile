@@ -6,7 +6,7 @@ node {
   }
 
   stage("Verification") {
-    sh "cd ansible; ansible-playbook site.yml --syntax-check"
+    sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --syntax-check"
   }
 
   stage("TestBuild") {
