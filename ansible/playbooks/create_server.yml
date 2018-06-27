@@ -1,0 +1,37 @@
+-   name: load user data
+    include_vars:
+      - ../files/customvars.yml
+
+-   name: Create an instance in the OpenStack cloud
+    os_server:
+      state: present
+      auth: 
+        auth_url: https://172.21.81.150
+        username: '{{ openstack_user }}'
+        password: '{{ openstack_password }}'
+        project_name: 'li9'
+      name: dmost-vm
+      image: 'd962e522-48be-4383-a134-ec7d064598bd'
+      key_name: 'dima-macbook'
+      timeout: 200
+      flavor: 'n1.small'
+      nics:
+        - net-id: '22f8a733-8822-4fb9-89bf-cdeaf1ef9c73'
+      meta:
+        hostname: dima-vm
+      userdata: '{{ userdata_build_machine_gcc }}'
+    tags:
+      - install
+
+-   name: Make the OpenStack instance does not exist
+    os_server:
+      state: absent
+      auth: 
+        auth_url: https://172.21.81.150
+        username: '{{ openstack_user }}'
+        password: '{{ openstack_password }}'
+        project_name: 'li9'
+    tags:
+      - uninstall
+
+  
