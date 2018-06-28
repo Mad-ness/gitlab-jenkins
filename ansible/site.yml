@@ -21,9 +21,9 @@
 
   - name: Setting up a proper username/password
     set_fact:
-		os_username: "{{ cloud_1_creds.user1_name }}"
-        os_password: "{{ cloud_1_creds.user1_password }}"
-        os_user_domain_name: "{{ cloud_1_creds.user1_domain_name }}"
+      os_username: "{{ cloud_1_creds.user1_name }}"
+      os_password: "{{ cloud_1_creds.user1_password }}"
+      os_user_domain_name: "{{ cloud_1_creds.user1_domain_name }}"
 
   - import_tasks: playbooks/create_server.yml
 
