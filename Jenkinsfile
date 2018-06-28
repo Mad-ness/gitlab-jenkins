@@ -1,25 +1,28 @@
 #!groovy
 
-node("ansible") {
-  stage("Checkout") {
-     checkout scm
-  }
+pipeline {
 
-  stage("Verification") {
-    sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --syntax-check"
-  }
+    agent { label 'ansible' }
 
-  stage("TestBuild") {
-    sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --tags=install,uninstall"
-  }
+    stage("Checkout") {
+        checkout scm
+    }
 
-  stage("Approve") {
-    input "The instance is ready to be deployed. Continue?"
-  }
+    stage("Verification") {
+        sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --syntax-check"
+    }
 
-  stage("Stage2") {
-    sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --tags=install"
-  }
+    stage("TestBuild") {
+        sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --tags=install,uninstall"
+    }
+
+    stage("Approve") {
+        input "The instance is ready to be deployed. Continue?"
+    }
+
+    stage("Stage2") {
+        sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --tags=install"
+    }
 
 }
 
