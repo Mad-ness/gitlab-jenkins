@@ -1,5 +1,29 @@
 - hosts: cloud_1
   become: false
   tasks: 
-  - include_tasks: playbooks/create_server.yml
+
+  - name: Setting up some needed variables
+    set_fact:
+      vm_name: dmost-vm
+      vm_hostname: "dmost-vm.cicd"
+      os_namespace: "cloud_1"
+
+  - name: Load environment and user specific variables
+    include_vars:
+      file: "{{ item.file }}"
+      name: "{{ item.name|default('') }}"
+    with_items:
+      - { file: "../files/{{ os_namespace }}.yml", name: "{{ os_namespace }}" }
+      - { file: "../files/customvars.yml", name: "userdata" }
+      - { file: "../passwds.vault" }
+    tags:
+      - always
+
+  - name: Setting up a proper username/password
+    set_fact:
+		os_username: "{{ cloud_1_creds.user1_name }}"
+        os_password: "{{ cloud_1_creds.user1_password }}"
+        os_user_domain_name: "{{ cloud_1_creds.user1_domain_name }}"
+
+  - import_tasks: playbooks/create_server.yml
 

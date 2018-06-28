@@ -1,42 +1,40 @@
-- name: Load environment and user specific variables
-  include_vars:
-    file: "{{ item.file }}"
-    name: "{{ name|default('') }}"
-  with_items:
-  - { file: ../files/cloud_1.yml, name: cloud_1 }
-  - { file: ../files/customvars.yml }
-  - { file: ../passwds.vault }
 
 
 - name: Create an instance in the OpenStack cloud
   os_server:
     state: present
+    verify: false
     auth:
-      auth_url: "{{ cloud_1.auth_url }}"
-      username: '{{ cloud_1_creds.user1_name }}'
-      password: '{{ cloud_1_creds.user1_password }}'
-      project_name: "{{ cloud_1.project }}"
-    name: dmost-vm
-    image: "{{ cloud_1.images.centos }}"
-    key_name: "{{ cloud_1.keynames.macbook }}"
+      auth_url: "{{ os_namespace.auth_url }}"
+      username: "{{ os_username }}"
+      password: "{{ os_password }}"
+      project_name: "{{ os_namespace.project_name }}"
+      domain_name: "{{ os_user_domain_name }}"
+    name: "{{ vm_name }}"
+    image: "{{ os_namespace.images.centos7_x64 }}"
+    key_name: "{{ os_namespace.keynames.macbook }}"
     timeout: 200
-    flavor: "{{ cloud_1.flavors.n1_small }}"
+    flavor: "{{ os_namespace.flavors.n1_small }}"
     nics:
-      - net-id: "{{ cloud_1.networks.int1 }}"
+      - net-id: "{{ os_namespace.networks.int1.id }}"
     meta:
-      hostname: dima-vm
-    userdata: '{{ userdata_build_machine_gcc }}'
+      hostname: "{{ vm_name }}.{{ vm_hostname|default('') }}"
+    userdata: "{{ userdata.postinstall }}"
   tags:
     - install
 
-- name: Make the OpenStack instance does not exist
+
+- name: Make the OpenStack instance not existing
   os_server:
     state: absent
     auth:
-      auth_url: "{{ cloud_1.auth_url }}"
-      username: '{{ cloud_1.user1_name }}'
-      password: '{{ cloud_1.user1_password }}'
-      project_name: "{{ cloud_1.project }}"
+      auth_url: "{{ os_namespace.auth_url }}"
+      username: "{{ os_username }}"
+      password: "{{ os_password }}"
+      project_name: "{{ os_namespace.project_name }}"
+      domain_name: "{{ os_user_domain_name }}"
+    name: "{{ vm_name }}"
+    verify: false
   tags:
     - uninstall
 
