@@ -13,8 +13,8 @@
     state: present
     auth:
       auth_url: "{{ cloud_1.auth_url }}"
-      username: '{{ cloud_1.user1_name }}'
-      password: '{{ cloud_1.user1_password }}'
+      username: '{{ cloud_1_creds.user1_name }}'
+      password: '{{ cloud_1_creds.user1_password }}'
       project_name: "{{ cloud_1.project }}"
     name: dmost-vm
     image: "{{ cloud_1.images.centos }}"

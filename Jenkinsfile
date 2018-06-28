@@ -20,7 +20,7 @@ node('ansible') {
     }
 
     stage("TestBuild") {
-        sh "cd ansible; ansible-playbook site.yml --vault-password-file=~/etc/vault.passwd --tags=install,uninstall"
+        sh "cd ansible; ansible-playbook site.yml --vault-password-file=~/etc/vault.passwd"
     }
 
 //    stage("Approve") {
