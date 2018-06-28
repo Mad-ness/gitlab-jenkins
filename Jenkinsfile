@@ -1,10 +1,19 @@
 #!groovy
 
-node('ansible') {
 
-    stage("Checkout") {
+stage('Checkout') {
+    node('master') {
         checkout scm
+        stash includes: 'ansible/**/**', name: 'ansiblePlaybooks'
     }
+    node('ansible') {
+        dir('.') {
+            unstash 'ansiblePlaybooks'
+        } 
+    } 
+}
+
+node('ansible') {
 
     stage("SyntaxCheck") {
         sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --syntax-check"
