@@ -2,11 +2,11 @@
   become: false
   tasks: 
 
-  - name: Setting up some needed variables
+  - name: Set up the namespace the user data will load to
     set_fact:
-      vm_name: dmost-vm
-      vm_hostname: "dmost-vm.cicd"
       os_namespace: "cloud_1"
+    tags:
+     - always
 
   - name: Load environment and user specific variables
     include_vars:
@@ -19,11 +19,15 @@
     tags:
       - always
 
-  - name: Setting up a proper username/password
+  - name: Set up some needed variables
     set_fact:
+      vm_name: dmost-vm
+      vm_hostname: "dmost-vm.cicd"
       os_username: "{{ cloud_1_creds.user1_name }}"
       os_password: "{{ cloud_1_creds.user1_password }}"
       os_user_domain_name: "{{ cloud_1_creds.user1_domain_name }}"
+    tags:
+      - always
 
   - import_tasks: playbooks/create_server.yml
 

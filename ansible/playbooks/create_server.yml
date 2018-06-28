@@ -1,6 +1,8 @@
 - name: Define some variable for shortness
   set_fact:
     os_namespace: "{{ hostvars[inventory_hostname][os_namespace] }}"
+  tags:
+   - always
 
 
 - name: Create an instance in the OpenStack cloud
