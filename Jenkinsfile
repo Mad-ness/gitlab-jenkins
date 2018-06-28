@@ -1,10 +1,12 @@
 #!groovy
 
-node('ansible') {
-
+node('git') {
     stage("Checkout") {
         checkout scm
     }
+}
+
+node('ansible') {
 
     stage("Verification") {
         sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --syntax-check"
