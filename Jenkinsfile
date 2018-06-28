@@ -20,7 +20,7 @@ node('ansible') {
     }
 
     stage("TestBuild") {
-        sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --tags=install,uninstall"
+        sh "cd ansible; ansible-playbook site.yml --vault-password-file=~/etc/vault.passwd --tags=install,uninstall"
     }
 
 //    stage("Approve") {
@@ -28,7 +28,7 @@ node('ansible') {
 //    }
 
     stage("Deploy") {
-        sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --tags=install"
+        sh "cd ansible; ansible-playbook site.yml --vault-password-file=~/etc/vault.passwd --tags=install"
     }
 
 }

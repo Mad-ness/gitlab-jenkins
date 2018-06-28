@@ -1,7 +1,12 @@
-- name: load user data
+- name: Load environment and user specific variables
   include_vars:
-  - ../files/customvars.yml
-  - ../passwds.vault
+    file: "{{ item.file }}"
+    name: "{{ name|default('') }}"
+  with_items:
+  - { file: ../files/cloud_1.yml, name: cloud_1 }
+  - { file: ../files/customvars.yml }
+  - { file: ../passwds.vault }
+
 
 - name: Create an instance in the OpenStack cloud
   os_server:
