@@ -1,14 +1,12 @@
 #!groovy
 
-node('git') {
+node('ansible') {
+
     stage("Checkout") {
         checkout scm
     }
-}
 
-node('ansible') {
-
-    stage("Verification") {
+    stage("SyntaxCheck") {
         sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --syntax-check"
     }
 
@@ -20,7 +18,7 @@ node('ansible') {
         input "The instance is ready to be deployed. Continue?"
     }
 
-    stage("Stage2") {
+    stage("Deploy") {
         sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --tags=install"
     }
 
