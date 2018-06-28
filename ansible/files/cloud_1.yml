@@ -1,0 +1,13 @@
+project: "e71b25251f0b4dfb90617985cb32cf0e"
+project_name: "li9"
+auth_url: "http://172.21.81.150:35357/v3"
+keynames:
+    macbook: "dima-macbook"
+flavors:
+  n1_small: "n1.small"
+images:
+  centos7_x64: "d962e522-48be-4383-a134-ec7d064598bd"
+networks:
+  int1:
+    id: "22f8a733-8822-4fb9-89bf-cdeaf1ef9c73"
+

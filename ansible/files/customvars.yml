@@ -1,5 +1,7 @@
-userdata_build_machine_gcc: |
+postinstall: |
   {%- raw -%}#!/bin/bash
   yum install -y gcc make libevent
 
   {% endraw %}
+
+

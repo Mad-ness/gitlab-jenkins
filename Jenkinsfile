@@ -1,25 +1,40 @@
 #!groovy
 
-node {
-  stage("Checkout") {
-     checkout scm
-  }
 
-  stage("Verification") {
-    sh "cd ansible; ansible-playbook site.yml --syntax-check"
-  }
+stage('Checkout') {
 
-  stage("TestBuild") {
-    sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --tags=install,uninstall"
-  }
+    node('master') {
+        checkout scm
+        stash includes: 'ansible/**/**', name: 'ansiblePlaybooks'
+    }
 
-  stage("Approve") {
-    input "The instance is ready to be deployed. Continue?"
-  }
+    node('ansible') {
+        dir('.') {
+            unstash 'ansiblePlaybooks'
+        } 
+    } 
 
-  stage("Stage2") {
-    sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --tags=install"
-  }
+}
+
+
+node('ansible') {
+
+    stage("SyntaxCheck") {
+        sh "cd ansible; ansible-playbook site.yml --syntax-check"
+    }
+
+    stage("TestBuild") {
+        sh "cd ansible; ansible-playbook site.yml --vault-password-file=${HOME}/etc/vault.passwd --tags=uninstall"
+        sh "cd ansible; ansible-playbook site.yml --vault-password-file=${HOME}/etc/vault.passwd --tags=install,uninstall"
+    }
+
+    stage("Approve") {
+        input "The instance is ready to be deployed. Continue?"
+    }
+
+    stage("Deploy") {
+        sh "cd ansible; ansible-playbook site.yml --vault-password-file=${HOME}/etc/vault.passwd --tags=install"
+    }
 
 }
 
