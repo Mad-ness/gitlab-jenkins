@@ -16,11 +16,11 @@ stage('Checkout') {
 node('ansible') {
 
     stage("SyntaxCheck") {
-        sh "cd ansible; ANSIBLE_VAULT_PASSWORD=\"`~/bin/vault-env`\" ansible-playbook site.yml --syntax-check"
+        sh "cd ansible; ansible-playbook site.yml --syntax-check"
     }
 
     stage("TestBuild") {
-        sh "cd ansible; ansible-playbook site.yml --vault-password-file=~/etc/vault.passwd"
+        sh "cd ansible; ansible-playbook site.yml --vault-password-file=${HOME}/etc/vault.passwd"
     }
 
 //    stage("Approve") {
@@ -28,7 +28,7 @@ node('ansible') {
 //    }
 
     stage("Deploy") {
-        sh "cd ansible; ansible-playbook site.yml --vault-password-file=~/etc/vault.passwd --tags=install"
+        sh "cd ansible; ansible-playbook site.yml --vault-password-file=${HOME}/etc/vault.passwd --tags=install"
     }
 
 }

@@ -13,9 +13,9 @@
       file: "{{ item.file }}"
       name: "{{ item.name|default('') }}"
     with_items:
-      - { file: "../files/{{ os_namespace }}.yml", name: "{{ os_namespace }}" }
-      - { file: "../files/customvars.yml", name: "userdata" }
-      - { file: "../passwds.vault" }
+      - { file: "files/{{ os_namespace }}.yml", name: "{{ os_namespace }}" }
+      - { file: "files/customvars.yml", name: "userdata" }
+      - { file: "passwds.vault" }
     tags:
       - always
 
