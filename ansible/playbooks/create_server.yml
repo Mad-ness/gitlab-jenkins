@@ -1,37 +1,37 @@
--   name: load user data
-    include_vars:
-      - ../files/customvars.yml
-      - ../passwds.vault
+- name: load user data
+  include_vars:
+  - ../files/customvars.yml
+  - ../passwds.vault
 
--   name: Create an instance in the OpenStack cloud
-    os_server:
-      state: present
-      auth:
-        auth_url: "{{ cloud_1.auth_url }}"
-        username: '{{ cloud_1.user1_name }}'
-        password: '{{ cloud_1.user1_password }}'
-        project_name: "{{ cloud_1.project }}"
-      name: dmost-vm
-      image: "{{ cloud_1.images.centos }}"
-      key_name: "{{ cloud_1.keynames.macbook }}"
-      timeout: 200
-      flavor: "{{ cloud_1.flavors.n1_small }}"
-      nics:
-        - net-id: "{{ cloud_1.networks.int1 }}"
-      meta:
-        hostname: dima-vm
-      userdata: '{{ userdata_build_machine_gcc }}'
-    tags:
-      - install
+- name: Create an instance in the OpenStack cloud
+  os_server:
+    state: present
+    auth:
+      auth_url: "{{ cloud_1.auth_url }}"
+      username: '{{ cloud_1.user1_name }}'
+      password: '{{ cloud_1.user1_password }}'
+      project_name: "{{ cloud_1.project }}"
+    name: dmost-vm
+    image: "{{ cloud_1.images.centos }}"
+    key_name: "{{ cloud_1.keynames.macbook }}"
+    timeout: 200
+    flavor: "{{ cloud_1.flavors.n1_small }}"
+    nics:
+      - net-id: "{{ cloud_1.networks.int1 }}"
+    meta:
+      hostname: dima-vm
+    userdata: '{{ userdata_build_machine_gcc }}'
+  tags:
+    - install
 
--   name: Make the OpenStack instance does not exist
-    os_server:
-      state: absent
-      auth:
-        auth_url: "{{ cloud_1.auth_url }}"
-        username: '{{ cloud_1.user1_name }}'
-        password: '{{ cloud_1.user1_password }}'
-        project_name: "{{ cloud_1.project }}"
-    tags:
-      - uninstall
+- name: Make the OpenStack instance does not exist
+  os_server:
+    state: absent
+    auth:
+      auth_url: "{{ cloud_1.auth_url }}"
+      username: '{{ cloud_1.user1_name }}'
+      password: '{{ cloud_1.user1_password }}'
+      project_name: "{{ cloud_1.project }}"
+  tags:
+    - uninstall
 

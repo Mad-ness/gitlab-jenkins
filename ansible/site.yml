@@ -1,5 +1,5 @@
-- hosts: localhost
+- hosts: cloud_1
   become: false
   tasks: 
-    - include_tasks: playbooks/create_server.yml
+  - include_tasks: playbooks/create_server.yml
 
