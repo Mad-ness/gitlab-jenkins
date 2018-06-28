@@ -1,6 +1,6 @@
 #!groovy
 
-node {
+node("ansible") {
   stage("Checkout") {
      checkout scm
   }
