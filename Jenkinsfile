@@ -1,8 +1,6 @@
 #!groovy
 
-pipeline {
-
-    agent { label 'ansible' }
+node('ansible') {
 
     stage("Checkout") {
         checkout scm
